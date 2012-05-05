@@ -15,13 +15,19 @@ class Node(object):
         self.target = target
         self.highest = payload[-1]
         self.length = len(payload)
-        self.cost = self.length + min(
+        self.estimation = min(
           ([
-            (target - self.highest)/i
+            ((target - self.highest)+0.1)/float(i)
             for i in payload
-            if i + self.highest <= target
-          ] or [0]) + [powers_to(self.highest, target)]
+            if i + self.highest < target
+          ] or [+0.1])
         )
+        p = powers_to(self.highest, target) + 0.2
+        if p > 0:
+            self.estimation = min([self.estimation, p])
+        if self.highest == target:
+            self.estimation = 0
+        self.cost = self.length + self.estimation
 
     def generate_children(self):
         if self.highest == 1:
