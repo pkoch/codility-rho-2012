@@ -11,7 +11,7 @@ def powers_to(n, target):
 
 class Node(object):
     def __init__(self, target, payload):
-        self.payload = payload
+        self.payload = tuple(sorted(payload))
         self.target = target
         self.highest = payload[-1]
         self.length = len(payload)
@@ -27,11 +27,19 @@ class Node(object):
         if self.highest == 1:
             return [self.__class__(self.target, (1,2,))]
 
-        return [
-            self.__class__(self.target, self.payload + (self.highest + i,) )
+        result = []
+        increments = set(
+            i + j
             for i in self.payload
-            if self.highest + i <= self.target
-        ]
+            for j in self.payload
+            if i + j not in self.payload and
+              i + j <= self.target
+        )
+
+        for i in increments:
+                result.append(self.__class__(self.target, self.payload + (i,) ))
+
+        return result
 
     # heap wants __lt__ for comparisons.
     def __lt__(self, o):
@@ -39,6 +47,9 @@ class Node(object):
 
     def __eq__(self, o):
         return self.target == o.target and self.payload == o.payload
+
+    def __hash__(self):
+        return hash(self.payload)
 
     def __repr__(self):
         return "Node(%s, %s)#%s+%s"%(
@@ -54,13 +65,18 @@ def hit_the_number(n):
 
     heap = [Node(n, (1,))]
 
+    discarded_solutions = set()
+
     while len(heap) > 0:
         next_ = heapq.heappop(heap)
+        discarded_solutions.add(next_.payload)
 
         if next_.highest == n:
             return next_.payload
 
         for c in next_.generate_children():
+            if c.payload in discarded_solutions:
+                continue
             heapq.heappush(heap, c)
 
 def hack(aa):

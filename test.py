@@ -21,11 +21,23 @@ class NodeTest(unittest.TestCase):
     def test_children_3(self):
         self.assertEqual(
             [
-                Node(42,(1,2, 3, 4,)),
-                Node(42,(1,2, 3, 5,)),
-                Node(42,(1,2, 3, 6,)),
+                Node(6,(1,2, 3, 4,)),
+                Node(6,(1,2, 3, 5,)),
+                Node(6,(1,2, 3, 6,)),
             ],
-            Node(42, (1, 2, 3,)).generate_children(),
+            Node(6, (1, 2, 3,)).generate_children(),
+        )
+
+    def test_children_4(self):
+        self.assertEqual(
+            set([
+                Node(42,(1,2, 3, 4, 5)),
+                Node(42,(1,2, 3, 5, 6)),
+                Node(42,(1,2, 3, 5, 7)),
+                Node(42,(1,2, 3, 5, 8)),
+                Node(42,(1,2, 3, 5, 10)),
+            ]),
+            set(Node(42, (1, 2, 3, 5)).generate_children()),
         )
 
 class HitTheTest(unittest.TestCase):
