@@ -55,11 +55,17 @@ class HitTheTest(unittest.TestCase):
             # (1, 2, 4, 8, 16, 32, 48, 49, 81, 162, 211,),
         )
 
-#  [ Sequence [1, 2, 4, 8, 16, 32, 64, 128, 132, 164, 165, 330, 495] is too long ]dd
+    #  [ Sequence [1, 2, 4, 8, 16, 32, 64, 128, 132, 164, 165, 330, 495] is too long ]dd
     def test_495(self):
        self.assertEqual(
            12,
            len(hit_the_number(495)),
+        )
+
+    def test_310(self):
+       self.assertEqual(
+           12,
+           len(hit_the_number(310)),
         )
 
 if __name__ == '__main__':
