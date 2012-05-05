@@ -63,3 +63,26 @@ def hit_the_number(n):
         for c in next_.generate_children():
             heapq.heappush(heap, c)
 
+def hack(aa):
+  d, i = aa
+  d[i] = len(hit_the_number(i))
+
+if __name__ == '__main__':
+    from multiprocessing import Pool, Manager
+    manager = Manager()
+    pool = Pool(processes=4)
+
+    d = manager.dict()
+
+    try:
+        from itertools import izip_longest
+        pool.map_async(
+            hack,
+            izip_longest([], xrange(1,601), fillvalue=d),
+        )
+    finally:
+        pool.close()
+        pool.join()
+
+    from pprint import pprint
+    pprint(dict(d))
