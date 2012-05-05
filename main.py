@@ -1,11 +1,11 @@
 import heapq
 
-def powers_to(n, target):
+def bisections_until_contained(highest, target):
     i = 0
 
-    while target >= n:
+    while target > highest:
         i += 1
-        n *= 2
+        target /= 2
 
     return i
 
@@ -22,7 +22,7 @@ class Node(object):
             if i + self.highest < target
           ] or [+0.1])
         )
-        p = powers_to(self.highest, target) + 0.2
+        p = bisections_until_contained(self.highest, target) + 0.2
         if p > 0:
             self.estimation = min([self.estimation, p])
         if self.highest == target:
@@ -63,10 +63,12 @@ def hit_the_number(n):
     while len(heap) > 0:
         next_ = heapq.heappop(heap)
 
+        #print '*', next_
         if next_.highest == n:
             return next_.payload
 
         for c in next_.generate_children():
+            #print ' ', c
             heapq.heappush(heap, c)
 
 def hack(aa):
