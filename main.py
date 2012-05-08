@@ -3,7 +3,7 @@ import heapq
 def powers_to(n, target):
     i = 0
 
-    while target >= n:
+    while target > n:
         i += 1
         n *= 2
 
@@ -15,16 +15,7 @@ class Node(object):
         self.target = target
         self.highest = payload[-1]
         self.length = len(payload)
-        self.estimation = min(
-          ([
-            ((target - self.highest)+0.1)/float(i)
-            for i in payload
-            if i + self.highest < target
-          ] or [+0.1])
-        )
-        p = powers_to(self.highest, target) + 0.2
-        if p > 0:
-            self.estimation = min([self.estimation, p])
+        self.estimation = powers_to(self.highest, target)
         if self.highest == target:
             self.estimation = 0
         self.cost = self.length + self.estimation
@@ -32,6 +23,12 @@ class Node(object):
     def generate_children(self):
         if self.highest == 1:
             return [self.__class__(self.target, (1,2,))]
+
+        if self.estimation < 2:
+            remains = self.target - self.highest
+            if remains not in self.payload:
+                return []
+            return [self.__class__(self.target, self.payload + (self.highest + remains,))]
 
         return [
             self.__class__(self.target, self.payload + (self.highest + i,) )
