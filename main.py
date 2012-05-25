@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import heapq
 
 def powers_to(n, target):
@@ -71,6 +72,15 @@ def hack(aa):
   d[i] = len(hit_the_number(i))
 
 if __name__ == '__main__':
+    from sys import argv, exit
+    if len(argv) > 1:
+        for i in argv[1:]:
+            try:
+                i = int(i)
+            except:
+                print "%s doesn0t seem like an int."%(i,)
+            print hit_the_number(i)
+        exit()
     from multiprocessing import Pool, Manager
     manager = Manager()
     pool = Pool(processes=4)
